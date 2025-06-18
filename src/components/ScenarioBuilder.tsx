@@ -171,7 +171,7 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
                       onChange={(e) => updateAssignment(index, 'userCount', parseInt(e.target.value))}
                       className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${(assignment.userCount / team.memberCount) * 100}%, #E5E7EB ${(assignment.userCount / team.memberCount) * 100}%, #E5E7EB 100%)`
+                        background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${((assignment.userCount - 1) / (team.memberCount - 1)) * 100}%, #E5E7EB ${((assignment.userCount - 1) / (team.memberCount - 1)) * 100}%, #E5E7EB 100%)`
                       }}
                     />
                     <div className="flex justify-between text-xs text-gray-400">
