@@ -30,6 +30,12 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
 
   const totalUsers = scenario.assignments.reduce((sum, assignment) => sum + assignment.userCount, 0);
   const avgCostPerUser = totalUsers > 0 ? budgetSummary.totalCost / totalUsers : 0;
+  
+  // Calculate base budget utilization vs buffer usage
+  const baseBudgetUtilization = (budgetSummary.totalCost / BUDGET_CONSTRAINTS.monthlyBudget) * 100;
+  const isUsingBuffer = budgetSummary.totalCost > BUDGET_CONSTRAINTS.monthlyBudget;
+  const bufferUsed = isUsingBuffer ? budgetSummary.totalCost - BUDGET_CONSTRAINTS.monthlyBudget : 0;
+  const bufferUtilization = (bufferUsed / BUDGET_CONSTRAINTS.premiumBuffer) * 100;
 
   return (
     <div className="space-y-6">
@@ -43,11 +49,27 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
                 ${budgetSummary.totalCost.toLocaleString()}
               </p>
             </div>
-            <DollarSign className="h-8 w-8 text-green-600" />
+            <DollarSign className={`h-8 w-8 ${isUsingBuffer ? 'text-orange-600' : 'text-green-600'}`} />
           </div>
-          <p className="text-sm text-gray-500 mt-2">
-            {budgetSummary.budgetUtilization.toFixed(1)}% of budget used
-          </p>
+          <div className="mt-2 space-y-1">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-600">Base Budget:</span>
+              <span className={baseBudgetUtilization > 100 ? 'text-red-600 font-medium' : 'text-gray-900'}>
+                {Math.min(baseBudgetUtilization, 100).toFixed(1)}%
+              </span>
+            </div>
+            {isUsingBuffer && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-orange-600">Buffer Used:</span>
+                <span className="text-orange-600 font-medium">
+                  ${bufferUsed.toLocaleString()} ({bufferUtilization.toFixed(1)}%)
+                </span>
+              </div>
+            )}
+            <div className="text-xs text-gray-500 mt-1">
+              Base: ${BUDGET_CONSTRAINTS.monthlyBudget.toLocaleString()} + Buffer: ${BUDGET_CONSTRAINTS.premiumBuffer.toLocaleString()}
+            </div>
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-6">

@@ -4,6 +4,7 @@ import { calculateBudgetSummary, getDefaultScenario } from './utils/budgetCalcul
 import { ScenarioBuilder } from './components/ScenarioBuilder';
 import { BudgetDashboard } from './components/BudgetDashboard';
 import { ToolsOverview } from './components/ToolsOverview';
+import { BUDGET_CONSTRAINTS } from './data';
 import { Calculator, DollarSign } from 'lucide-react';
 
 function App() {
@@ -15,6 +16,11 @@ function App() {
     const summary = calculateBudgetSummary(currentScenario);
     setBudgetSummary(summary);
   }, [currentScenario]);
+
+  // Calculate base budget vs buffer usage for header
+  const baseBudgetUtilization = budgetSummary ? (budgetSummary.totalCost / BUDGET_CONSTRAINTS.monthlyBudget) * 100 : 0;
+  const isUsingBuffer = budgetSummary ? budgetSummary.totalCost > BUDGET_CONSTRAINTS.monthlyBudget : false;
+  const bufferUsed = isUsingBuffer && budgetSummary ? budgetSummary.totalCost - BUDGET_CONSTRAINTS.monthlyBudget : 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -28,18 +34,35 @@ function App() {
                 <p className="text-sm text-gray-600">Model AI tooling budget distribution across teams</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2 text-sm">
-              <DollarSign className="h-4 w-4 text-green-600" />
-              <span className="font-medium">
-                ${budgetSummary?.totalCost.toLocaleString()} / $5,750 monthly
-              </span>
-              <span className={`px-2 py-1 rounded-full text-xs ${
-                budgetSummary?.withinBudget 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                {budgetSummary?.budgetUtilization.toFixed(1)}%
-              </span>
+            <div className="flex items-center space-x-3 text-sm">
+              <DollarSign className={`h-4 w-4 ${isUsingBuffer ? 'text-orange-600' : 'text-green-600'}`} />
+              <div className="flex flex-col items-end min-w-0">
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium">
+                    ${budgetSummary?.totalCost.toLocaleString() || '0'}
+                  </span>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    !budgetSummary?.withinBudget 
+                      ? 'bg-red-100 text-red-800' 
+                      : isUsingBuffer
+                      ? 'bg-orange-100 text-orange-800'
+                      : 'bg-green-100 text-green-800'
+                  }`}>
+                    {Math.min(baseBudgetUtilization, 100).toFixed(1)}% base
+                  </span>
+                </div>
+                <div className="text-xs text-gray-500 flex items-center space-x-1 h-4">
+                  <span>${BUDGET_CONSTRAINTS.monthlyBudget.toLocaleString()} base</span>
+                  {isUsingBuffer ? (
+                    <>
+                      <span>+</span>
+                      <span className="text-orange-600">${bufferUsed.toLocaleString()} buffer</span>
+                    </>
+                  ) : (
+                    <span className="text-gray-400">+ ${BUDGET_CONSTRAINTS.premiumBuffer.toLocaleString()} buffer available</span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           
