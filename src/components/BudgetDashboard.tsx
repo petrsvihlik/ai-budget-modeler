@@ -36,6 +36,7 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
   const isUsingBuffer = budgetSummary.totalCost > BUDGET_CONSTRAINTS.monthlyBudget;
   const bufferUsed = isUsingBuffer ? budgetSummary.totalCost - BUDGET_CONSTRAINTS.monthlyBudget : 0;
   const bufferUtilization = (bufferUsed / BUDGET_CONSTRAINTS.premiumBuffer) * 100;
+  const isOverTotalBudget = !budgetSummary.withinBudget;
 
   return (
     <div className="space-y-6">
@@ -49,7 +50,7 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
                 ${budgetSummary.totalCost.toLocaleString()}
               </p>
             </div>
-            <DollarSign className={`h-8 w-8 ${isUsingBuffer ? 'text-orange-600' : 'text-green-600'}`} />
+            <DollarSign className={`h-8 w-8 ${isOverTotalBudget ? 'text-red-600' : isUsingBuffer ? 'text-orange-600' : 'text-green-600'}`} />
           </div>
           <div className="mt-2 space-y-1">
             <div className="flex items-center justify-between text-sm">
@@ -60,8 +61,8 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
             </div>
             {isUsingBuffer && (
               <div className="flex items-center justify-between text-sm">
-                <span className="text-orange-600">Buffer Used:</span>
-                <span className="text-orange-600 font-medium">
+                <span className={isOverTotalBudget ? 'text-red-600' : 'text-orange-600'}>Buffer Used:</span>
+                <span className={`${isOverTotalBudget ? 'text-red-600' : 'text-orange-600'} font-medium`}>
                   ${bufferUsed.toLocaleString()} ({bufferUtilization.toFixed(1)}%)
                 </span>
               </div>

@@ -21,6 +21,7 @@ function App() {
   const baseBudgetUtilization = budgetSummary ? (budgetSummary.totalCost / BUDGET_CONSTRAINTS.monthlyBudget) * 100 : 0;
   const isUsingBuffer = budgetSummary ? budgetSummary.totalCost > BUDGET_CONSTRAINTS.monthlyBudget : false;
   const bufferUsed = isUsingBuffer && budgetSummary ? budgetSummary.totalCost - BUDGET_CONSTRAINTS.monthlyBudget : 0;
+  const isOverTotalBudget = budgetSummary ? !budgetSummary.withinBudget : false;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -35,14 +36,14 @@ function App() {
               </div>
             </div>
             <div className="flex items-center space-x-3 text-sm">
-              <DollarSign className={`h-4 w-4 ${isUsingBuffer ? 'text-orange-600' : 'text-green-600'}`} />
+              <DollarSign className={`h-4 w-4 ${isOverTotalBudget ? 'text-red-600' : isUsingBuffer ? 'text-orange-600' : 'text-green-600'}`} />
               <div className="flex flex-col items-end min-w-0">
                 <div className="flex items-center space-x-2">
                   <span className="font-medium">
                     ${budgetSummary?.totalCost.toLocaleString() || '0'}
                   </span>
                   <span className={`px-2 py-1 rounded-full text-xs ${
-                    !budgetSummary?.withinBudget 
+                    isOverTotalBudget
                       ? 'bg-red-100 text-red-800' 
                       : isUsingBuffer
                       ? 'bg-orange-100 text-orange-800'
@@ -56,7 +57,9 @@ function App() {
                   {isUsingBuffer ? (
                     <>
                       <span>+</span>
-                      <span className="text-orange-600">${bufferUsed.toLocaleString()} buffer</span>
+                      <span className={isOverTotalBudget ? 'text-red-600' : 'text-orange-600'}>
+                        ${bufferUsed.toLocaleString()} buffer
+                      </span>
                     </>
                   ) : (
                     <span className="text-gray-400">+ ${BUDGET_CONSTRAINTS.premiumBuffer.toLocaleString()} buffer available</span>
