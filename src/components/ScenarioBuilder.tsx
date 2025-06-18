@@ -98,6 +98,21 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
               <div key={index} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
                 <div className="flex-1">
                   <select
+                    value={assignment.teamId}
+                    onChange={(e) => updateAssignment(index, 'teamId', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select Team</option>
+                    {TEAMS.map(team => (
+                      <option key={team.id} value={team.id}>
+                        {team.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="flex-1">
+                  <select
                     value={assignment.toolId}
                     onChange={(e) => updateAssignment(index, 'toolId', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -106,21 +121,6 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
                     {TOOLS.map(tool => (
                       <option key={tool.id} value={tool.id}>
                         {tool.name} (${tool.price}/user) - {tool.type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div className="flex-1">
-                  <select
-                    value={assignment.teamId}
-                    onChange={(e) => updateAssignment(index, 'teamId', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select Team</option>
-                    {TEAMS.map(team => (
-                      <option key={team.id} value={team.id}>
-                        {team.name} ({team.memberCount} members)
                       </option>
                     ))}
                   </select>
@@ -158,6 +158,21 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
           <div className="flex items-center space-x-4">
             <div className="flex-1">
               <select
+                value={newAssignment.teamId || ''}
+                onChange={(e) => setNewAssignment({ ...newAssignment, teamId: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Team</option>
+                {TEAMS.map(team => (
+                  <option key={team.id} value={team.id}>
+                    {team.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="flex-1">
+              <select
                 value={newAssignment.toolId || ''}
                 onChange={(e) => setNewAssignment({ ...newAssignment, toolId: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -166,21 +181,6 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
                 {TOOLS.map(tool => (
                   <option key={tool.id} value={tool.id}>
                     {tool.name} (${tool.price}/user) - {tool.type}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="flex-1">
-              <select
-                value={newAssignment.teamId || ''}
-                onChange={(e) => setNewAssignment({ ...newAssignment, teamId: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Team</option>
-                {TEAMS.map(team => (
-                  <option key={team.id} value={team.id}>
-                    {team.name} ({team.memberCount} members)
                   </option>
                 ))}
               </select>
