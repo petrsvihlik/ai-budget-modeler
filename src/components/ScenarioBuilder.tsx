@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BudgetScenario, BudgetSummary, ToolAssignment } from '../types';
 import { TOOLS, TEAMS } from '../data';
-import { Plus, Trash2, AlertTriangle, Sliders, BarChart3 } from 'lucide-react';
+import { Plus, Trash2, AlertTriangle, BarChart3 } from 'lucide-react';
 import { MultiHandleSlider } from './MultiHandleSlider';
 
 interface ScenarioBuilderProps {
@@ -16,7 +16,6 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
     teamId: '',
     userCount: 1
   });
-  const [showSliders, setShowSliders] = useState(false);
   const [showMultiSlider, setShowMultiSlider] = useState(false);
 
   const addAssignment = () => {
@@ -91,30 +90,17 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Tool Assignments</h3>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setShowSliders(!showSliders)}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                showSliders 
-                  ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <Sliders className="h-4 w-4" />
-              <span>{showSliders ? 'Hide Sliders' : 'Individual Sliders'}</span>
-            </button>
-            <button
-              onClick={() => setShowMultiSlider(!showMultiSlider)}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                showMultiSlider 
-                  ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <BarChart3 className="h-4 w-4" />
-              <span>{showMultiSlider ? 'Hide Multi-Slider' : 'Multi-Handle Slider'}</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setShowMultiSlider(!showMultiSlider)}
+            className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              showMultiSlider 
+                ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <BarChart3 className="h-4 w-4" />
+            <span>{showMultiSlider ? 'Hide Multi-Slider' : 'Multi-Handle Slider'}</span>
+          </button>
         </div>
         
         <div className="space-y-4">
@@ -124,131 +110,82 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
             const cost = tool ? tool.price * assignment.userCount : 0;
             
             return (
-              <div key={index} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                <div className="flex-1">
-                  <select
-                    value={assignment.teamId}
-                    onChange={(e) => updateAssignment(index, 'teamId', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-3">
+                <div className="flex items-center space-x-4">
+                  <div className="flex-1">
+                    <select
+                      value={assignment.teamId}
+                      onChange={(e) => updateAssignment(index, 'teamId', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select Team</option>
+                      {TEAMS.map(team => (
+                        <option key={team.id} value={team.id}>
+                          {team.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <select
+                      value={assignment.toolId}
+                      onChange={(e) => updateAssignment(index, 'toolId', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select Tool</option>
+                      {TOOLS.map(tool => (
+                        <option key={tool.id} value={tool.id}>
+                          {tool.name} (${tool.price}/user) - {tool.type}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="w-24 text-right">
+                    <span className="text-sm font-medium text-gray-900">
+                      ${cost.toLocaleString()}
+                    </span>
+                  </div>
+                  
+                  <button
+                    onClick={() => removeAssignment(index)}
+                    className="p-2 text-red-600 hover:bg-red-50 rounded-md"
                   >
-                    <option value="">Select Team</option>
-                    {TEAMS.map(team => (
-                      <option key={team.id} value={team.id}>
-                        {team.name}
-                      </option>
-                    ))}
-                  </select>
+                    <Trash2 className="h-4 w-4" />
+                  </button>
                 </div>
                 
-                <div className="flex-1">
-                  <select
-                    value={assignment.toolId}
-                    onChange={(e) => updateAssignment(index, 'toolId', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select Tool</option>
-                    {TOOLS.map(tool => (
-                      <option key={tool.id} value={tool.id}>
-                        {tool.name} (${tool.price}/user) - {tool.type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div className="w-24">
-                  <input
-                    type="number"
-                    min="1"
-                    max={team?.memberCount || 100}
-                    value={assignment.userCount}
-                    onChange={(e) => updateAssignment(index, 'userCount', parseInt(e.target.value) || 1)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                
-                <div className="w-24 text-right">
-                  <span className="text-sm font-medium text-gray-900">
-                    ${cost.toLocaleString()}
-                  </span>
-                </div>
-                
-                <button
-                  onClick={() => removeAssignment(index)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-md"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {/* Integrated Slider */}
+                {tool && team && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Users: {assignment.userCount}</span>
+                      <span className="text-gray-500">Max: {team.memberCount}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max={team.memberCount}
+                      value={assignment.userCount}
+                      onChange={(e) => updateAssignment(index, 'userCount', parseInt(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                      style={{
+                        background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${(assignment.userCount / team.memberCount) * 100}%, #E5E7EB ${(assignment.userCount / team.memberCount) * 100}%, #E5E7EB 100%)`
+                      }}
+                    />
+                    <div className="flex justify-between text-xs text-gray-400">
+                      <span>1</span>
+                      <span>{team.memberCount}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
 
-        {/* Slider Interface */}
-        {showSliders && scenario.assignments.length > 0 && (
-          <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
-            <div className="flex items-center space-x-2 mb-4">
-              <Sliders className="h-5 w-5 text-blue-600" />
-              <h4 className="text-lg font-semibold text-blue-900">Interactive Sliders</h4>
-            </div>
-            <div className="space-y-4">
-              {scenario.assignments.map((assignment, index) => {
-                const tool = TOOLS.find(t => t.id === assignment.toolId);
-                const team = TEAMS.find(t => t.id === assignment.teamId);
-                const cost = tool ? tool.price * assignment.userCount : 0;
-                const maxUsers = team?.memberCount || 100;
-                
-                if (!tool || !team) return null;
-                
-                return (
-                  <div key={index} className="bg-white rounded-lg p-4 border border-blue-200">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm font-medium text-gray-700">{team.name}</span>
-                          <span className="text-gray-400">→</span>
-                          <span className="text-sm font-medium text-gray-700">{tool.name}</span>
-                        </div>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          tool.type === 'experimental' 
-                            ? 'bg-orange-100 text-orange-800' 
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {tool.type}
-                        </span>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-gray-900">${cost.toLocaleString()}</div>
-                        <div className="text-xs text-gray-500">${tool.price}/user</div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Users: {assignment.userCount}</span>
-                        <span className="text-gray-500">Max: {maxUsers}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="1"
-                        max={maxUsers}
-                        value={assignment.userCount}
-                        onChange={(e) => updateAssignment(index, 'userCount', parseInt(e.target.value))}
-                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                        style={{
-                          background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${(assignment.userCount / maxUsers) * 100}%, #E5E7EB ${(assignment.userCount / maxUsers) * 100}%, #E5E7EB 100%)`
-                        }}
-                      />
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>1</span>
-                        <span>{maxUsers}</span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-                     </div>
-         )}
+        
 
         {/* Multi-Handle Slider Interface */}
         {showMultiSlider && scenario.assignments.length > 0 && (
