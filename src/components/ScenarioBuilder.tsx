@@ -185,25 +185,6 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
           })}
         </div>
 
-        
-
-        {/* Multi-Handle Slider Interface */}
-        {showMultiSlider && scenario.assignments.length > 0 && (
-          <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
-            <div className="flex items-center space-x-2 mb-4">
-              <BarChart3 className="h-5 w-5 text-purple-600" />
-              <h4 className="text-lg font-semibold text-purple-900">Multi-Handle Distribution Slider</h4>
-            </div>
-            <MultiHandleSlider
-              assignments={scenario.assignments}
-              onAssignmentsChange={(newAssignments) => 
-                onScenarioChange({ ...scenario, assignments: newAssignments })
-              }
-              totalBudget={budgetSummary?.totalCost || 0}
-            />
-          </div>
-        )}
-
         <div className="mt-6 p-4 border-2 border-dashed border-gray-300 rounded-lg">
           <div className="flex items-center space-x-4">
             <div className="flex-1">
@@ -255,6 +236,23 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
             </button>
           </div>
         </div>
+
+        {/* Multi-Handle Slider Interface */}
+        {showMultiSlider && scenario.assignments.length > 0 && (
+          <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+            <div className="flex items-center space-x-2 mb-4">
+              <BarChart3 className="h-5 w-5 text-purple-600" />
+              <h4 className="text-lg font-semibold text-purple-900">Multi-Handle Distribution Slider</h4>
+            </div>
+            <MultiHandleSlider
+              assignments={scenario.assignments}
+              onAssignmentsChange={(newAssignments) => 
+                onScenarioChange({ ...scenario, assignments: newAssignments })
+              }
+              totalBudget={budgetSummary?.totalCost || 0}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
