@@ -104,8 +104,8 @@ export function getDefaultScenario(): BudgetScenario {
     assignments: [
       { toolId: 'gh-copilot', teamId: 'engineering', userCount: 40 },
       { toolId: 'cursor-team', teamId: 'engineering', userCount: 20 },
-      { toolId: 'claude-code', teamId: 'ux', userCount: 9 },
-      { toolId: 'claude-code', teamId: 'pm', userCount: 5 },
+      { toolId: 'claude-code-enterprise', teamId: 'ux', userCount: 9 },
+      { toolId: 'claude-code-enterprise', teamId: 'pm', userCount: 5 },
     ],
     externalSeats: 10
   };

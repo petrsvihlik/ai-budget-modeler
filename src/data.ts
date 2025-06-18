@@ -10,9 +10,23 @@ export const TOOLS: Tool[] = [
     category: 'Code Assistant'
   },
   {
-    id: 'claude-code',
-    name: 'Claude Code',
+    id: 'claude-code-pro',
+    name: 'Claude Code Pro',
     price: 17,
+    type: 'experimental',
+    category: 'AI Assistant'
+  },
+  {
+    id: 'claude-code-team',
+    name: 'Claude Code Team',
+    price: 25,
+    type: 'experimental',
+    category: 'AI Assistant'
+  },
+  {
+    id: 'claude-code-enterprise',
+    name: 'Claude Code Enterprise',
+    price: 60,
     type: 'approved',
     category: 'AI Assistant'
   },
@@ -40,7 +54,7 @@ export const TOOLS: Tool[] = [
   },
   {
     id: 'windsurf-teams',
-    name: 'Windsurf+Teams+SSO',
+    name: 'Windsurf Teams + SSO',
     price: 40,
     type: 'experimental',
     category: 'IDE'
