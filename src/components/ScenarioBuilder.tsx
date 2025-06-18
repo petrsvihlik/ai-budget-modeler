@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BudgetScenario, BudgetSummary, ToolAssignment } from '../types';
 import { TOOLS, TEAMS } from '../data';
-import { Plus, Trash2, AlertTriangle, BarChart3 } from 'lucide-react';
+import { getPresetScenarios } from '../utils/budgetCalculator';
+import { Plus, Trash2, AlertTriangle, BarChart3, Zap, Shield, Target, Beaker } from 'lucide-react';
 import { MultiHandleSlider } from './MultiHandleSlider';
 
 interface ScenarioBuilderProps {
@@ -17,6 +18,32 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
     userCount: 1
   });
   const [showMultiSlider, setShowMultiSlider] = useState(false);
+  
+  const presetScenarios = getPresetScenarios();
+  
+  const loadPresetScenario = (presetScenario: BudgetScenario) => {
+    onScenarioChange(presetScenario);
+  };
+  
+  const getScenarioIcon = (scenarioId: string) => {
+    switch (scenarioId) {
+      case 'conservative': return Shield;
+      case 'balanced': return Target;
+      case 'ambitious': return Zap;
+      case 'experimental': return Beaker;
+      default: return Target;
+    }
+  };
+  
+  const getScenarioColor = (scenarioId: string) => {
+    switch (scenarioId) {
+      case 'conservative': return 'bg-green-100 text-green-700 hover:bg-green-200 border-green-300';
+      case 'balanced': return 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-300';
+      case 'ambitious': return 'bg-purple-100 text-purple-700 hover:bg-purple-200 border-purple-300';
+      case 'experimental': return 'bg-orange-100 text-orange-700 hover:bg-orange-200 border-orange-300';
+      default: return 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300';
+    }
+  };
 
   const addAssignment = () => {
     if (newAssignment.toolId && newAssignment.teamId && newAssignment.userCount) {
@@ -60,16 +87,47 @@ export function ScenarioBuilder({ scenario, onScenarioChange, budgetSummary }: S
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Scenario Configuration</h2>
         
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Scenario Name
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Choose a Preset Scenario
           </label>
-          <input
-            type="text"
-            value={scenario.name}
-            onChange={(e) => onScenarioChange({ ...scenario, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {presetScenarios.map((preset) => {
+              const Icon = getScenarioIcon(preset.id);
+              const isActive = scenario.id === preset.id;
+              return (
+                                  <button
+                    key={preset.id}
+                    onClick={() => loadPresetScenario(preset)}
+                    className={`flex flex-col items-center p-4 rounded-lg border-2 transition-all ${
+                      isActive 
+                        ? getScenarioColor(preset.id).replace('hover:', '') + ' ring-2 ring-offset-2 ring-blue-500'
+                        : getScenarioColor(preset.id)
+                    }`}
+                    title={preset.description}
+                  >
+                    <Icon className="h-6 w-6 mb-2" />
+                    <span className="text-sm font-medium">{preset.name}</span>
+                    <span className="text-xs opacity-75 mt-1 text-center">
+                      {preset.assignments.length} assignments
+                    </span>
+                  </button>
+              );
+            })}
+          </div>
+          <div className="mt-3 text-sm text-gray-600">
+            <div>
+              <strong>Current:</strong> {scenario.name} 
+              <span className="ml-2 text-gray-500">
+                ({scenario.assignments.length} assignments)
+              </span>
+            </div>
+            {scenario.description && (
+              <div className="text-gray-500 mt-1">
+                {scenario.description}
+              </div>
+            )}
+          </div>
         </div>
 
         {budgetSummary && budgetSummary.warnings.length > 0 && (

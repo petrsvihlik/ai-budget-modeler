@@ -22,6 +22,7 @@ export interface ToolAssignment {
 export interface BudgetScenario {
   id: string;
   name: string;
+  description?: string;
   assignments: ToolAssignment[];
   externalSeats: number;
 }

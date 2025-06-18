@@ -99,16 +99,80 @@ export function calculateBudgetSummary(scenario: BudgetScenario): BudgetSummary 
 
 export function getDefaultScenario(): BudgetScenario {
   return {
-    id: 'default',
-    name: 'Default Scenario',
+    id: 'balanced',
+    name: 'Balanced',
+    description: 'Mix of approved and experimental tools with moderate coverage',
     assignments: [
-      { toolId: 'gh-copilot', teamId: 'engineering', userCount: 40 },
-      { toolId: 'cursor-team', teamId: 'engineering', userCount: 20 },
-      { toolId: 'claude-code-enterprise', teamId: 'ux', userCount: 9 },
-      { toolId: 'claude-code-enterprise', teamId: 'pm', userCount: 5 },
+      { toolId: 'cursor-team', teamId: 'engineering', userCount: 25 },
+      { toolId: 'gh-copilot', teamId: 'engineering', userCount: 20 },
+      { toolId: 'claude-code-max', teamId: 'engineering', userCount: 5 },
+      { toolId: 'claude-code-team', teamId: 'engineering', userCount: 5 },
+      { toolId: 'windsurf-teams', teamId: 'engineering', userCount: 5 },
+      { toolId: 'cursor-team', teamId: 'ux', userCount: 3 },
+      { toolId: 'cursor-team', teamId: 'pm', userCount: 3 },
     ],
     externalSeats: 10
   };
+}
+
+export function getPresetScenarios(): BudgetScenario[] {
+  return [
+    {
+      id: 'conservative',
+      name: 'Conservative',
+      description: 'Low-cost approach using mostly approved tools',
+      assignments: [
+        { toolId: 'gh-copilot', teamId: 'engineering', userCount: 55 },
+        { toolId: 'claude-code-pro', teamId: 'engineering', userCount: 5 },
+        { toolId: 'gh-copilot', teamId: 'ux', userCount: 5 },
+        { toolId: 'gh-copilot', teamId: 'pm', userCount: 3 },
+      ],
+      externalSeats: 5
+    },
+    {
+      id: 'balanced',
+      name: 'Balanced',
+      description: 'Mix of approved and experimental tools with moderate coverage',
+      assignments: [
+        { toolId: 'cursor-team', teamId: 'engineering', userCount: 25 },
+        { toolId: 'gh-copilot', teamId: 'engineering', userCount: 20 },
+        { toolId: 'claude-code-max', teamId: 'engineering', userCount: 5 },
+        { toolId: 'claude-code-team', teamId: 'engineering', userCount: 5 },
+        { toolId: 'windsurf-teams', teamId: 'engineering', userCount: 5 },
+        { toolId: 'cursor-team', teamId: 'ux', userCount: 3 },
+        { toolId: 'cursor-team', teamId: 'pm', userCount: 3 },
+      ],
+      externalSeats: 10
+    },
+    {
+      id: 'ambitious',
+      name: 'Ambitious',
+      description: 'High-end tools with maximum team coverage',
+      assignments: [
+        { toolId: 'cursor-team', teamId: 'engineering', userCount: 30 },
+        { toolId: 'claude-code-enterprise', teamId: 'engineering', userCount: 25 },
+        { toolId: 'claude-code-max', teamId: 'engineering', userCount: 5 },
+        { toolId: 'cursor-team', teamId: 'ux', userCount: 6 },
+        { toolId: 'claude-code-enterprise', teamId: 'ux', userCount: 3 },
+        { toolId: 'cursor-team', teamId: 'pm', userCount: 5 },
+      ],
+      externalSeats: 10
+    },
+    {
+      id: 'experimental',
+      name: 'Max Experimental',
+      description: 'Focus on testing experimental tools within constraints',
+      assignments: [
+        { toolId: 'gh-copilot', teamId: 'engineering', userCount: 45 },
+        { toolId: 'claude-code-max', teamId: 'engineering', userCount: 5 },
+        { toolId: 'windsurf-teams', teamId: 'engineering', userCount: 5 },
+        { toolId: 'gh-copilot-ft', teamId: 'engineering', userCount: 5 },
+        { toolId: 'claude-code-pro', teamId: 'ux', userCount: 5 },
+        { toolId: 'claude-code-pro', teamId: 'pm', userCount: 5 },
+      ],
+      externalSeats: 10
+    }
+  ];
 }
 
 export function validateAssignment(assignment: ToolAssignment): string[] {
