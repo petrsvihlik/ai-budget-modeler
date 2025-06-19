@@ -1,4 +1,6 @@
 # AI Budget Modeler
+![image](https://github.com/user-attachments/assets/1b8e39f6-085d-4f4d-8b96-6cdce851dc98)
+
 
 A React-based web application designed to help model and visualize the distribution of AI tooling budget across different teams and people in an organization.
 
