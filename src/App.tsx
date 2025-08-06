@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BudgetScenario, BudgetSummary } from './types';
 import { calculateBudgetSummary, getDefaultScenario } from './utils/budgetCalculator';
 import { ScenarioBuilder } from './components/ScenarioBuilder';

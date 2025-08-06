@@ -1,4 +1,4 @@
-import { BudgetScenario, BudgetSummary, Tool, Team, ToolAssignment } from '../types';
+import { BudgetScenario, BudgetSummary, ToolAssignment } from '../types';
 import { BUDGET_CONSTRAINTS, TOOLS, TEAMS } from '../data';
 
 export function calculateBudgetSummary(scenario: BudgetScenario): BudgetSummary {

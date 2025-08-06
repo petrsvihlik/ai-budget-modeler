@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BudgetScenario, BudgetSummary } from '../types';
 import { TOOLS, TEAMS, BUDGET_CONSTRAINTS } from '../data';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -152,7 +152,7 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
                 fill="#8884d8"
                 dataKey="cost"
               >
-                {teamChartData.filter(team => team.cost > 0).map((entry, index) => (
+                {teamChartData.filter(team => team.cost > 0).map((_, index) => (
                   <Cell key={`team-cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -175,7 +175,7 @@ export function BudgetDashboard({ scenario, budgetSummary }: BudgetDashboardProp
                 fill="#8884d8"
                 dataKey="cost"
               >
-                {toolChartData.map((entry, index) => (
+                {toolChartData.map((_, index) => (
                   <Cell key={`tool-cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

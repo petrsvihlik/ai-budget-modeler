@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BudgetScenario, BudgetSummary, ToolAssignment } from '../types';
 import { TOOLS, TEAMS } from '../data';
 import { getPresetScenarios } from '../utils/budgetCalculator';

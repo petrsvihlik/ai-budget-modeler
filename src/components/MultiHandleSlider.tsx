@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { ToolAssignment } from '../types';
 import { TOOLS, TEAMS } from '../data';
 
@@ -20,7 +20,7 @@ interface SliderSegment {
 
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'];
 
-export function MultiHandleSlider({ assignments, onAssignmentsChange, totalBudget }: MultiHandleSliderProps) {
+export function MultiHandleSlider({ assignments, onAssignmentsChange }: MultiHandleSliderProps) {
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const [dragStartValue, setDragStartValue] = useState<number | null>(null);
@@ -99,7 +99,7 @@ export function MultiHandleSlider({ assignments, onAssignmentsChange, totalBudge
     setDragStartValue(null);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (dragIndex !== null) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -137,7 +137,7 @@ export function MultiHandleSlider({ assignments, onAssignmentsChange, totalBudge
           style={{ minWidth: '400px' }}
         >
           {/* Segments */}
-          {segments.map((segment, index) => (
+          {segments.map((segment) => (
             <div
               key={segment.id}
               className="absolute top-0 h-full flex items-center justify-center text-white text-xs font-medium transition-all duration-200 hover:brightness-110"
@@ -184,15 +184,15 @@ export function MultiHandleSlider({ assignments, onAssignmentsChange, totalBudge
       {/* Legend */}
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {segments.map((segment, index) => {
-            // Calculate team utilization
-            const teamTotalUsers = assignments.reduce((sum, assignment) => {
-              if (assignment.teamId === segment.assignment.teamId) {
-                return sum + assignment.userCount;
-              }
-              return sum;
-            }, 0);
-            const teamUtilization = (teamTotalUsers / segment.team.memberCount) * 100;
+          {segments.map((segment) => {
+            // Calculate team utilization (commented out as not currently used)
+            // const teamTotalUsers = assignments.reduce((sum, assignment) => {
+            //   if (assignment.teamId === segment.assignment.teamId) {
+            //     return sum + assignment.userCount;
+            //   }
+            //   return sum;
+            // }, 0);
+            // const teamUtilization = (teamTotalUsers / segment.team.memberCount) * 100;
             
             return (
               <div key={segment.id} className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200">

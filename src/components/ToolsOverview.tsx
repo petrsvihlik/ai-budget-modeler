@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { TOOLS, BUDGET_CONSTRAINTS } from '../data';
 import { CheckCircle, Clock, DollarSign } from 'lucide-react';
 
